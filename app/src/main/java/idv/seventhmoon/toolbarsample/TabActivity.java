@@ -2,6 +2,7 @@ package idv.seventhmoon.toolbarsample;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends AppCompatActivity implements  SwipeRefreshLayout.OnRefreshListener {
+private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RecyclerView mRecyclerView;
     private MyAdapter mAdapter;
@@ -50,6 +49,16 @@ tabLayout.addTab(tabLayout.newTab().setIcon(android.R.drawable.ic_menu_today));
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        loadData();
+
+//        ImageView imageViewBkg = (ImageView) findViewById(R.id.image_background);
+//        Glide.with(this).load("https://lh3.googleusercontent.com/-MYdnUw1Bz68/Vbw6wY02aDI/AAAAAAACBb8/7kv24wdASeU/s144-Ic42/IMG_0307.JPG").centerCrop().into(imageViewBkg);
+    }
+
+
+    private void loadData(){
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(this, mDataset);
         mRecyclerView.setAdapter(mAdapter);
@@ -58,10 +67,8 @@ tabLayout.addTab(tabLayout.newTab().setIcon(android.R.drawable.ic_menu_today));
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-//        ImageView imageViewBkg = (ImageView) findViewById(R.id.image_background);
-//        Glide.with(this).load("https://lh3.googleusercontent.com/-MYdnUw1Bz68/Vbw6wY02aDI/AAAAAAACBb8/7kv24wdASeU/s144-Ic42/IMG_0307.JPG").centerCrop().into(imageViewBkg);
-    }
 
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,5 +90,12 @@ tabLayout.addTab(tabLayout.newTab().setIcon(android.R.drawable.ic_menu_today));
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.setRefreshing(false);
+//        loadData();
+
     }
 }
