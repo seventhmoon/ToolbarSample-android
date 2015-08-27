@@ -8,7 +8,8 @@
     android:layout_margin="4dp"
     android:padding="4dp"
     card_view:cardCornerRadius="4dp"
-    card_view:cardBackgroundColor="#CCFFFFFF"
+    android:theme="@style/ThemeOverlay.AppCompat.Light"
+
     >
 
 
@@ -70,20 +71,20 @@
 
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_margin="4dp"
                 android:background="@android:color/holo_green_dark" />
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_margin="4dp"
                 android:background="@android:color/holo_red_dark" />
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_margin="4dp"
                 android:background="@android:color/holo_orange_dark" />
         </LinearLayout>

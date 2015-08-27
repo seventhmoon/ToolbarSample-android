@@ -11,8 +11,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class TabActivity extends AppCompatActivity implements  SwipeRefreshLayout.OnRefreshListener {
-private SwipeRefreshLayout mSwipeRefreshLayout;
+public class TabActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RecyclerView mRecyclerView;
     private MyAdapter mAdapter;
@@ -34,9 +34,9 @@ private SwipeRefreshLayout mSwipeRefreshLayout;
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
 //        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-tabLayout.addTab(tabLayout.newTab().setIcon(android.R.drawable.ic_menu_today));
-tabLayout.addTab(tabLayout.newTab().setIcon(android.R.drawable.ic_menu_today));
-tabLayout.addTab(tabLayout.newTab().setIcon(android.R.drawable.ic_menu_today));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_white_24dp));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_history_white_24dp));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_favorite_white_24dp));
 
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -58,7 +58,7 @@ tabLayout.addTab(tabLayout.newTab().setIcon(android.R.drawable.ic_menu_today));
     }
 
 
-    private void loadData(){
+    private void loadData() {
         // specify an adapter (see also next example)
         mAdapter = new MyAdapter(this, mDataset);
         mRecyclerView.setAdapter(mAdapter);
