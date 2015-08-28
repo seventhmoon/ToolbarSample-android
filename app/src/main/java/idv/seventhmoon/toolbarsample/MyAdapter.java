@@ -2,6 +2,7 @@ package idv.seventhmoon.toolbarsample;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
         notifyItemRemoved(position);
     }
 
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -44,6 +46,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
         public ImageView mImageViewPoster;
         public ViewHolder(View v) {
             super(v);
+
+            v.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+                @Override
+                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+//                    menu.setHeaderTitle("Select The Action");
+                    menu.add(0, v.getId(), 0, "Add to wishlist");//groupId, itemId, order, title
+                    menu.add(0, v.getId(), 0, "Share...");
+                }
+            });
             mTextView = (TextView) v.findViewById(R.id.text_view);
             mImageViewPoster = (ImageView) v.findViewById(R.id.image_poster);
         }
@@ -76,7 +88,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> implem
                 .inflate(R.layout.list_cell_text, parent, false);
         // set the view's size, margins, paddings and layout parameters
 
+
+
         ViewHolder vh = new ViewHolder(v);
+
+
+
         return vh;
     }
 

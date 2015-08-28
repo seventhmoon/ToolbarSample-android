@@ -1,7 +1,12 @@
 package idv.seventhmoon.toolbarsample;
 
+import android.app.FragmentManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,23 +15,26 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
-public class TabActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+import com.bumptech.glide.Glide;
 
-    private RecyclerView mRecyclerView;
-    private MyAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+public class TabActivity extends AppCompatActivity implements DummyFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener {
 
-    private ItemTouchHelper mItemTouchHelper;
-
-    private final String[] mDataset = {"1", "2", "3", "4", "5", "6", "7", "8"};
-
+    private HomeFragment mHomeFragment;
+    private DummyFragment mDummyFragment;
+    private FloatingActionButton mYtFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
+        mHomeFragment = new HomeFragment();
+        mDummyFragment = new DummyFragment();
+
+        mYtFab = (FloatingActionButton) findViewById(R.id.fab_yt_search);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -34,41 +42,66 @@ public class TabActivity extends AppCompatActivity implements SwipeRefreshLayout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
 //        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_white_24dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_history_white_24dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_favorite_white_24dp));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_home_white_24dp).setTag("HOME"));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_history_white_24dp).setTag("HISTORY"));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_favorite_white_24dp).setTag("FAVORITE"));
 
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if ("HOME".equals(tab.getTag())) {
+                    showFragment(mHomeFragment);
+                    mYtFab.setVisibility(View.VISIBLE);
+                } else if ("HISTORY".equals(tab.getTag())) {
+                    showFragment(mDummyFragment);
+                    mYtFab.setVisibility(View.GONE);
+                } else if ("FAVORITE".equals(tab.getTag())) {
+                    showFragment(mDummyFragment);
+                    mYtFab.setVisibility(View.GONE);
+                }
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+            }
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        loadData();
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-//        ImageView imageViewBkg = (ImageView) findViewById(R.id.image_background);
-//        Glide.with(this).load("https://lh3.googleusercontent.com/-MYdnUw1Bz68/Vbw6wY02aDI/AAAAAAACBb8/7kv24wdASeU/s144-Ic42/IMG_0307.JPG").centerCrop().into(imageViewBkg);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+        showFragment(mHomeFragment);
+
+
+        ImageView imageViewBkg = (ImageView) findViewById(R.id.image_background);
+        Glide.with(this).load("https://lh3.googleusercontent.com/-MYdnUw1Bz68/Vbw6wY02aDI/AAAAAAACBb8/7kv24wdASeU/s1600-Ic42/IMG_0307.JPG").centerCrop().into(imageViewBkg);
+    }
+
+    private void showFragment(Fragment fragment){
+
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+        transaction.replace(R.id.fragment_container, fragment);
+//        transaction.addToBackStack(null);
+
+// Commit the transaction
+        transaction.commit();
+
+
     }
 
 
-    private void loadData() {
-        // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(this, mDataset);
-        mRecyclerView.setAdapter(mAdapter);
 
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,10 +125,10 @@ public class TabActivity extends AppCompatActivity implements SwipeRefreshLayout
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
-    public void onRefresh() {
-        mSwipeRefreshLayout.setRefreshing(false);
-//        loadData();
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }
